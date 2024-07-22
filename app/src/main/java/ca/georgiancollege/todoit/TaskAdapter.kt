@@ -97,6 +97,11 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
      */
     override fun getItemCount() = dataSet.size
 
+    fun removeItem(position: Int) {
+//        dataSet = dataSet.filterIndexed { index, _ -> index != position }.toTypedArray()
+        notifyItemRemoved(position)
+    }
+
     /**
      * Interface definition for a callback to be invoked when a task is clicked.
      */

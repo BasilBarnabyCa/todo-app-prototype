@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ca.georgiancollege.todoit.databinding.ActivityListBinding
 
 class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
@@ -69,7 +71,22 @@ class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+
+        // Setup ItemTouchHelper
+        val itemTouchHelper = ItemTouchHelper(object : SwipeToDeleteCallback(this@ListActivity) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                if (direction == ItemTouchHelper.LEFT) {
+                    // Todo: Swipe logic goes here
+                    val task = allTasks[position]
+                    Log.d("SwipeToDelete", "Task swiped: ${task.title}")
+                }
+            }
+        })
+
+        itemTouchHelper.attachToRecyclerView(binding.tasksRecyclerView)
     }
+
 
     override fun onTaskClick(position: Int) {
         Log.d("TaskAdapter", "Task clicked at position: $position")
